@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Developer Test</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<style type="text/css">
+		.sizes{
+			border: solid #CCCCCC 1px;
+		}
+	</style>
+</head>
+<body>
+	<!-- NOTIF -->
+	<div class="alert alert-danger fade show position-fixed bottom-0 end-0 p-3" id="notif" role="alert" style="z-index: 11">
+		<strong>Error!</strong> Must select a size first.
+	</div>
+	<!-- END NOTIF -->
+	<div class="container">
+		<div class="m-3" style="background-color: #F6F6F7;">
+			<div class="col-md-10 text-end">
+				<small class="text-muted" id="cart">My Cart (<span id="cartNumber">0</span>)</small>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<img src="classic-tee.jpg" class="img-fluid">
+			</div>
+			<div class="col-md-1"><br /></div>
+			<div class="col-md-4">
+				<div class="mb-4">
+					<h5>Classic Tee</h5>
+				</div>
+				<div class="mb-4">
+					<p><b>$75.00</b></p>
+				</div>
+				<div class="mb-4">
+					<small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt metus in risus venenatis, eget hendrerit tortor elementum. Nam id nunc ac dui ornare rutrum. Vivamus cursus sit amet magna ac fringilla. Ut aliquet sit amet augue venenatis maximus. Vestibulum aliquet enim non diam eleifend aliquet. Ut a tortor sed est blandit iaculis. Donec tempor interdum fermentum. Integer semper, quam nec lacinia rutrum, tortor mi mollis libero, ut suscipit lacus mi vitae dolor.</small>
+				</div>
+				<div class="mb-1" style="font-size: 15px;">
+						<small class="text-muted">
+							SIZE<span style="color: red;">*</span>
+							<strong>
+								<span id="sizeSelected"></span>
+							</strong>
+						</small>
+				</div>
+				<div class="mb-3">
+						<button type="button" class="btn btn-outline-secondary sizes">S</button>
+					<button type="button" class="btn btn-outline-secondary sizes">M</button>
+					<button type="button" class="btn btn-outline-secondary sizes">L</button>
+				</div>
+				<div class="mb-3">
+					<button type="button" id="btnAdd" class="btn btn-outline-dark" style="border: solid #222222 2px;"><strong>ADD TO CART</strong></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- CART -->
+	<div class="container px-1" id="cartItems" style="max-width: 300px; border: solid #CCCCCC 1px; background-color: white;">
+	</div>
+	<!-- END CART -->
+</body>
+</html>
+
+<script>
+
+	$("#cartItems").hide();
+	$("#notif").hide();
+
+	let cartNumber = 0;
+	let sizeSelected = '';
+	let smallQty = 0;
+	let mediumQty = 0;
+	let largeQty = 0;
+	let show = false;
+
+	$("#cart").on("mouseover click", function(){
+		show = true;
+		if(cartNumber != 0){
+			let position = $(this).position();
+			let top = position.top + 20;
+			let left = position.left - 220;
+			$("#cartItems").toggle();
+			$("#cartItems").css({
+	            'position': 'absolute',
+	            'top': top,
+	            'left': left
+	        });
+		}
+	});
+
+	$("#cart").on("mouseout", function(){
+		if(show){
+			$("#cartItems").hide();
+		}
+	});
+
+	$(".sizes").on("click", function(){
+		sizeSelected = $(this).text();
+		$("#sizeSelected").text(sizeSelected);
+	});
+
+	$("#btnAdd").on("click", function(){
+		if(sizeSelected != ''){
+			cartNumber++;
+			$("#cartNumber").text(cartNumber);
+
+			switch(sizeSelected){
+				case 'S':
+					smallQty++;
+					if(smallQty == 1){
+						$("#cartItems").append("<div class='row gx-1'><div class='col'><div class='p-2'><img src='classic-tee.jpg' class='img-fluid'></div></div><div class='col'><div class='p-2'><h6 class='card-title'>Classic Tee</h6><p class='card-text'><small><span id='smallQty'>"+smallQty+"</span> x <strong>$75.00</strong></small></p><p class='card-text'><small>Size: "+sizeSelected+"</p></div></div></div>");
+					}
+					else{
+						$("#smallQty").text(smallQty);
+					}
+					break;
+
+				case 'M':
+					mediumQty++;
+					if(mediumQty == 1){
+						$("#cartItems").append("<div class='row gx-1'><div class='col'><div class='p-2'><img src='classic-tee.jpg' class='img-fluid'></div></div><div class='col'><div class='p-2'><h6 class='card-title'>Classic Tee</h6><p class='card-text'><small><span id='mediumQty'>"+mediumQty+"</span> x <strong>$75.00</strong></small></p><p class='card-text'><small>Size: "+sizeSelected+"</p></div></div></div>");
+					}
+					else{
+						$("#mediumQty").text(mediumQty);
+					}
+					break;
+
+				case 'L':
+					largeQty++;
+					if(largeQty == 1){
+						$("#cartItems").append("<div class='row gx-1'><div class='col'><div class='p-2'><img src='classic-tee.jpg' class='img-fluid'></div></div><div class='col'><div class='p-2'><h6 class='card-title'>Classic Tee</h6><p class='card-text'><small><span id='largeQty'>"+largeQty+"</span> x <strong>$75.00</strong></small></p><p class='card-text'><small>Size: "+sizeSelected+"</p></div></div></div>");
+					}
+					else{
+						$("#largeQty").text(largeQty);
+					}
+					break;
+			}
+		}
+		else{
+			$("#notif").show(100).delay(2000).hide(100);
+		}
+	});
+
+
+</script>
